@@ -97,13 +97,8 @@ local user_configs = {}
 local function get_configs()
    local configs = DEFAULT_CONFIG
 
-   if g.colors_name == 'dracula-soft' then
-      configs.theme = 'dracula-soft'
-      configs.colors = require('dracula.palette-soft')
-   elseif g.colors_name == 'dracula' then
-      configs.theme = 'dracula'
-      configs.colors = require('dracula.palette')
-   end
+   configs.theme = 'dracula'
+   configs.colors = require('dracula.palette')
 
    configs = tbl_deep_extend("force", configs, user_configs)
 
