@@ -1,6 +1,4 @@
-local o = vim.o
 local g = vim.g
-local cmd = vim.cmd
 local nvim_set_hl = vim.api.nvim_set_hl
 local tbl_deep_extend = vim.tbl_deep_extend
 
@@ -13,13 +11,13 @@ local tbl_deep_extend = vim.tbl_deep_extend
 ---@field theme string?
 ---@field overrides HighlightGroups | fun(colors: Palette): HighlightGroups
 local DEFAULT_CONFIG = {
-   italic_comment = false,
+   italic_comment = true,
    transparent_bg = false,
    show_end_of_buffer = false,
    lualine_bg_color = nil,
    colors = require("dracula.palette"),
    overrides = {},
-   theme = 'dracula'
+   theme = "dracula",
 }
 
 local TRANSPARENTS = {
@@ -28,7 +26,7 @@ local TRANSPARENTS = {
    "NvimTreeNormal",
    "NvimTreeVertSplit",
    "NeoTreeNormal",
-   "NeoTreeNormalNC"
+   "NeoTreeNormalNC",
 }
 
 local function apply_term_colors(colors)
@@ -92,17 +90,9 @@ end
 ---@type DraculaConfig
 local user_configs = {}
 
---- get dracula configs
 ---@return DraculaConfig
 local function get_configs()
-   local configs = DEFAULT_CONFIG
-
-   configs.theme = 'dracula'
-   configs.colors = require('dracula.palette')
-
-   configs = tbl_deep_extend("force", configs, user_configs)
-
-   return configs
+   return DEFAULT_CONFIG
 end
 
 ---setup dracula colorscheme
@@ -123,16 +113,16 @@ local function load(theme)
 
    -- reset colors
    if g.colors_name then
-      cmd("hi clear")
+      vim.cmd("hi clear")
    end
 
    if vim.fn.exists("syntax_on") then
-      cmd("syntax reset")
+      vim.cmd("syntax reset")
    end
 
-   o.background = "dark"
-   o.termguicolors = true
-   g.colors_name = theme or 'dracula'
+   vim.o.background = "dark"
+   vim.o.termguicolors = true
+   g.colors_name = theme or "dracula"
 
    apply(get_configs())
 end
@@ -141,5 +131,7 @@ return {
    load = load,
    setup = setup,
    configs = get_configs,
-   colors = function() return get_configs().colors end,
+   colors = function()
+      return get_configs().colors
+   end,
 }
